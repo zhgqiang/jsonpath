@@ -7,29 +7,6 @@ import (
 	"strconv"
 )
 
-var aa = `
-{
-    "a": 3,
-    "b": [
-        1,
-        2
-    ],
-    "c": {
-        "d": 1
-    },
-    "e": {
-        "f": {
-            "c": 3
-        }
-    },
-    "m": [
-        {
-            "n": 1
-        }
-    ]
-}
-`
-
 const (
 	STRING  = "string"
 	INT     = "int"
