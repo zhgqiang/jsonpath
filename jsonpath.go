@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"regexp"
 	"strconv"
+	"errors"
 )
 
 const (
@@ -43,6 +44,9 @@ func setValue(index int, arr []string, value interface{}, preData interface{}, n
 	if err != nil {
 		return err
 	}
+	if nextData == nil {
+		return errors.New("数据为空")
+	}
 	if match {
 		i, err := strconv.Atoi(arr[index])
 		if err != nil {
@@ -63,6 +67,9 @@ func setValue(index int, arr []string, value interface{}, preData interface{}, n
 		val := m[i]
 
 		if val == nil {
+			if index+1 == len(arr) {
+				return errors.New("数组下标越界")
+			}
 			match, err := regexp.MatchString("^[0-9]\\d*$", arr[index+1])
 			if err != nil {
 				return err
@@ -80,11 +87,18 @@ func setValue(index int, arr []string, value interface{}, preData interface{}, n
 
 			m[i] = val
 		}
+
+		if index-1 < 0 {
+			return errors.New("数组下标越界")
+		}
+
 		match1, err := regexp.MatchString("^[0-9]\\d*$", arr[index-1])
 		if err != nil {
 			return err
 		}
-
+		if preData == nil {
+			return errors.New("前一个数据为空")
+		}
 		if match1 {
 			mPre := preData.([]interface{})
 			j, err := strconv.Atoi(arr[index-1])
@@ -105,6 +119,9 @@ func setValue(index int, arr []string, value interface{}, preData interface{}, n
 		}
 		val, ok := m[arr[index]]
 		if !ok {
+			if index+1 == len(arr) {
+				return errors.New("数组下标越界")
+			}
 			match, err := regexp.MatchString("^[0-9]\\d*$", arr[index+1])
 			if err != nil {
 				return err
